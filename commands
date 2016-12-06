@@ -153,12 +153,13 @@ case "$1" in
         IP=$(docker inspect $ID | grep IPAddress | awk '{ print $2 }' | tr -d ',"')
         # Write database connection vars to app's ENV file
         # I know there has to be a more eloquent method of doing this...
+        URL="DATABASE_URL=mysql://admin:$DB_PASSWORD@$IP:3306/db"
         HOST="DB_HOST=$IP"
         USER="DB_USER=admin"
         PASS="DB_PASS=$DB_PASSWORD"
         NAME="DB_NAME=db"
         PORT="DB_PORT=3306"
-        dokku config:set $APP $HOST $USER $PASS $NAME $PORT
+        dokku config:set $APP $URL $HOST $USER $PASS $NAME $PORT
         echo
         echo "-----> $APP linked to $DB_IMAGE database"
     fi
